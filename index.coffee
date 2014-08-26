@@ -38,5 +38,9 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
     router.get '/quest/:quest_id', (request, response) ->
         response.send request.quest
 
+    router.post '/mark/:quest_id', (request, response) ->
+        client.query 'insert into daily_mark (quest,date) values ($1,localtimestamp)', [request.quest_id]
+        response.send "ok"
+
     app.listen (app.get 'port'), () ->
         console.log "started; port = " + app.get('port')
