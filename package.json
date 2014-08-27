@@ -1,0 +1,27 @@
+{
+  "name": "daily-quest",
+  "version": "0.1.0",
+  "description": "Daily Quest App to help you form your daily habit",
+  "main": "index.coffee",
+  "scripts": {
+    "start": "node_modules/coffee-script/bin/coffee index.coffee"
+  },
+  "dependencies": {
+    "coffee-script": "~1.8.x",
+    "express": "~4.8.x",
+    "body-parser": "~1.6.x",
+    "pg": "~3.4.x"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/H4ssi/dailyquest"
+  },
+  "keywords": [
+    "daily-quest"
+  ],
+  "author": "Florian Hassanen",
+  "license": "MIT"
+}
