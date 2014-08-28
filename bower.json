@@ -1,0 +1,25 @@
+{
+  "name": "dailyquest",
+  "version": "0.1.0",
+  "authors": [
+    "Florian Hassanen <florian.hassanen@gmail.com>"
+  ],
+  "description": "dailyquest",
+  "main": "index.html",
+  "keywords": [
+    "dailyquest"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/H4ssi/dailyquest",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "core-component-page": "Polymer/core-component-page#>=0.3.0 <1.0.0"
+  }
+}

@@ -9,14 +9,12 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
     app = express()
     app.set 'port', process.env.PORT || 5000
     app.use (express.static __dirname + '/public')
+    app.use '/bower_components', (express.static __dirname + '/bower_components')
     app.use bodyParser.json()
 
     router = express.Router()
 
     app.use '/', router
-
-    router.get '/', (request, response) ->
-        response.send '/'
 
     router.get '/quests', (request, response) ->
         response.send 'test'
