@@ -7,7 +7,7 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
         return console.error 'error connecting to pg', err
 
     app = express()
-    app.set 'port', process.env.PORT || 5000
+    app.set 'port', process.env.PORT || 3000
     app.use (express.static __dirname + '/public')
     app.use '/bower_components', (express.static __dirname + '/bower_components')
     app.use bodyParser.json()

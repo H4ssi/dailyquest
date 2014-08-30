@@ -1,3 +1,7 @@
 /node_modules
+# these are generated from haml
 /public/*.js
 /public/**/*.html
+# installed ruby bundles
+/vendor
+/.bundle
