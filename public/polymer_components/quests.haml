@@ -1,0 +1,18 @@
+!!! 5
+
+%link(rel="import" href="../bower_components/polymer/polymer.html")
+
+%polymer-element(name="dq-quests")
+  %template
+    %core-ajax(auto
+               url="/quests"
+               handleAs="json"
+               on-core-response="{{questsReceived}}")
+    %ul
+      %template(repeat="{{quest in quests}}")
+        %li {{quest.name}}
+  :javascript
+    Polymer('dq-quests', {
+      questsReceived: function(q) {
+      this.quests = q.detail.response;
+        }});
