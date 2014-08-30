@@ -1,3 +1,3 @@
 #!/bin/bash
-coffee -c -w -o public public & 
+grunt watch &
 supervisor -i public,bower_components index.coffee
