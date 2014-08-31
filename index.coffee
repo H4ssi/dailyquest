@@ -17,7 +17,8 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
     app.use '/', router
 
     router.get '/quests', (request, response) ->
-        response.send [{"name": "q1"}, {"name": "q2"}]
+        client.query 'select * from quest', (err, result) ->
+            response.send result.rows
 
     router.param 'quest_id', (req, res, next, id) ->
         client.query 'select * from quest where id = $1', [id], (err, result) ->
