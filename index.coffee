@@ -30,7 +30,7 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
 
     router.post '/quest', (request, response) ->
         console.log request.body
-        lient.query 'insert into quest (name, start_date) values ($1,localtimestamp)', [request.body.name]
+        client.query 'insert into quest (name, start_date) values ($1,localtimestamp)', [request.body.name]
         response.send "ok"
 
     router.get '/quest/:quest_id', (request, response) ->
