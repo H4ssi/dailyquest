@@ -11,8 +11,7 @@
     %ul
       %template(repeat="{{quest in quests}}")
         %li {{quest.name}}
-  :javascript
-    Polymer('dq-quests', {
-      questsReceived: function(q) {
-      this.quests = q.detail.response;
-        }});
+  :coffeescript
+    Polymer 'dq-quests',
+      questsReceived: (q) ->
+        @quests = q.detail.response
