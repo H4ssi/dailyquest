@@ -2,6 +2,7 @@
 
 %link(rel="import" href="../bower_components/polymer/polymer.html")
 %link(rel="import" href="../bower_components/core-ajax/core-ajax.html")
+%link(rel="import" href="../bower_components/core-item/core-item.html")
 
 %polymer-element(name="dq-quests")
   %template
@@ -9,9 +10,8 @@
                url="/quests"
                handleAs="json"
                on-core-response="{{questsReceived}}")
-    %ul
-      %template(repeat="{{quest in quests}}")
-        %li {{quest.name}}
+    %template(repeat="{{quest in quests}}")
+      %core-item(label="{{quest.name}}")
   :coffeescript
     Polymer 'dq-quests',
       questsReceived: (q) ->
