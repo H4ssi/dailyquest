@@ -43,3 +43,4 @@ module.exports = (grunt) ->
 
     grunt.registerTask 'default', ['env:localBinPath', 'coffee', 'haml']
     grunt.registerTask 'heroku',  ['default', 'express:heroku']
+    grunt.registerTask 'dev',     ['default', 'watch']
