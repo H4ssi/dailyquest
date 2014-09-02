@@ -3,16 +3,43 @@
 %link(rel="import" href="../bower_components/polymer/polymer.html")
 %link(rel="import" href="../bower_components/core-ajax/core-ajax.html")
 %link(rel="import" href="../bower_components/core-item/core-item.html")
+%link(rel="import" href="../bower_components/paper-button/paper-button.html")
+%link(rel="import" href="../bower_components/paper-input/paper-input.html")
+-#%link(rel="import" href="../bower_components/paper-toast/paper-toast.html")
 
 %polymer-element(name="dq-quests")
   %template
-    %core-ajax(auto
-               url="/quests"
-               handleAs="json"
-               on-core-response="{{questsReceived}}")
+    %core-ajax#x(auto
+      url="/quests"
+      handleAs="json"
+      on-core-response="{{questsReceived}}")
     %template(repeat="{{quest in quests}}")
       %core-item(label="{{quest.name}}")
+    %paper-button(label="Add Quest" raisedButton on-click="{{addQuest}}")
   :coffeescript
     Polymer 'dq-quests',
       questsReceived: (q) ->
         @quests = q.detail.response
+      addQuest: -> location.hash = "create"
+      refresh: -> @$.x.go()
+
+%polymer-element(name="dq-create")
+  %template
+    %paper-input#name(label="Quest Title")
+    %paper-button(label="Create" raisedButton on-click="{{createQuest}}")
+    -#%paper-toast#toast(text="Quest created.")
+    %core-ajax#x(url="/quest"
+      method="POST"
+      handleAs="json"
+      contentType="application/json"
+      on-core-complete="{{redirect}}")
+  :coffeescript
+    Polymer 'dq-create',
+      createQuest: -> 
+        console.log @$.name.inputValue
+        #@$.toast.show()
+        @$.x.body = JSON.stringify {name: @$.name.inputValue}
+        @$.x.go()
+        @$.name.value = ""
+      redirect: ->
+        location.hash = ""

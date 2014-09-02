@@ -29,12 +29,13 @@
         %flatiron-director(route="{{route}}" autoHash)
         %core-pages#pages(valueattr="label" selected="{{route}}")
           %div(label="")
-            %dq-quests
+            %dq-quests#quests
           %div(label="create")
             %dq-create
       :coffeescript
         Polymer "dq-app",
           route: ""
+          routeChanged: (o,n) -> @$.quests.refresh() if n == ""
 
     %core-header-panel
       %core-toolbar
