@@ -16,7 +16,7 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
 
     app.use '/', router
 
-    router.get '/quests', (request, response) ->
+    router.get '/quest', (request, response) ->
         client.query 'select * from quest', (err, result) ->
             response.send result.rows
 
@@ -25,17 +25,16 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
             if err
                 console.error err
             if result.rows.length
-                req.quest_id = id
-                req.quest = result.rows[0]
+                req.id = id
+                req.name = result.rows[0]
             next()
 
     router.post '/quest', (request, response) ->
-        console.log request.body
-        client.query 'insert into quest (name, start_date) values ($1,localtimestamp)', [request.body.name]
-        response.send "ok"
+        client.query 'insert into quest (name, start_date) values ($1,localtimestamp) returning id, name', [request.body.name], (err, result) ->
+          response.send result.rows[0]
 
     router.get '/quest/:quest_id', (request, response) ->
-        response.send request.quest
+        response.send request
 
     router.post '/mark/:quest_id', (request, response) ->
         client.query 'insert into daily_mark (quest,date) values ($1,localtimestamp)', [request.quest_id]

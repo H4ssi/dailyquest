@@ -1,45 +1,44 @@
 !!! 5
 
 %link(rel="import" href="../bower_components/polymer/polymer.html")
-%link(rel="import" href="../bower_components/core-ajax/core-ajax.html")
+%link(rel="import" href="../bower_components/record-set/record-set.html")
 %link(rel="import" href="../bower_components/core-item/core-item.html")
 %link(rel="import" href="../bower_components/paper-button/paper-button.html")
 %link(rel="import" href="../bower_components/paper-input/paper-input.html")
 -#%link(rel="import" href="../bower_components/paper-toast/paper-toast.html")
 
+%record-set(href="")
+
+%polymer-element(name="quest-record" type="quest" extends="record-base" attributes="name" noscript)
+
+%polymer-element(name="quest-item" extends="quest-record" noscript)
+  %template
+    %core-item(label="{{name}}")
+
 %polymer-element(name="dq-quests")
   %template
-    %core-ajax#x(auto
-      url="/quests"
-      handleAs="json"
-      on-core-response="{{questsReceived}}")
-    %template(repeat="{{quest in quests}}")
-      %core-item(label="{{quest.name}}")
+    %quest-record#x
+    %template(repeat="{{quest in $.x.all}}")
+      %quest-item(rid="{{quest}}")
     %paper-button(label="Add Quest" raisedButton on-click="{{addQuest}}")
   :coffeescript
     Polymer 'dq-quests',
-      questsReceived: (q) ->
-        @quests = q.detail.response
+      ready: -> @refresh()
       addQuest: -> location.hash = "create"
-      refresh: -> @$.x.go()
+      refresh: -> @$.x.pull()
 
-%polymer-element(name="dq-create")
+%polymer-element(name="dq-create" extends="quest-record")
   %template
-    %paper-input#name(label="Quest Title")
+    %paper-input#name(label="Quest Title" value="{{name}}")
     %paper-button(label="Create" raisedButton on-click="{{createQuest}}")
     -#%paper-toast#toast(text="Quest created.")
-    %core-ajax#x(url="/quest"
-      method="POST"
-      handleAs="json"
-      contentType="application/json"
-      on-core-complete="{{redirect}}")
   :coffeescript
     Polymer 'dq-create',
       createQuest: -> 
-        console.log @$.name.inputValue
         #@$.toast.show()
-        @$.x.body = JSON.stringify {name: @$.name.inputValue}
-        @$.x.go()
-        @$.name.value = ""
-      redirect: ->
-        location.hash = ""
+        @createRemote()
+        @redirect()
+      redirect: -> location.hash = ""
+      refresh: -> 
+        @rid = undefined
+        @name = ""
