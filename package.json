@@ -10,6 +10,7 @@
     "body-parser": "~1.6.x",
     "coffee-script": "~1.8.x",
     "express": "~4.8.x",
+    "express-resource": "^1.0.0",
     "grunt": "~0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-coffee": "^0.11.1",
