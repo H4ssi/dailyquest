@@ -13,11 +13,7 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
   app.use '/bower_components', (express.static __dirname + '/bower_components')
   app.use bodyParser.json()
 
-  router = express.Router()
-
-  # app.use '/', router
-
-  app.resource 'quest',
+  quest = app.resource 'quest',
     load: (id, next) ->
       client.query 'select id, name from quest where id = $1', [id], (err, result) ->
         if err
@@ -37,9 +33,16 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
     show: (req, res) ->
       res.send req.quest
 
-  router.post '/mark/:quest_id', (request, response) ->
-    client.query 'insert into daily_mark (quest,date) values ($1,localtimestamp)', [request.quest_id]
-    response.send "ok"
+  mark = app.resource 'mark',
+    index: (req, res) ->
+      console.log req
+      client.query 'select id, date from daily_mark where quest = $1 order by date', [req.quest.id], (err, pgres) ->
+        res.send pgres.rows
+    create: (req, res) ->
+      client.query 'insert into daily_mark (quest,date) values ($1,localtimestamp) returning id, date', [req.quest.id], (err, pgres) ->
+        res.send pgres.rows[0]
+
+  quest.add mark
 
   app.listen (app.get 'port'), () ->
     console.log "started; port = " + app.get('port')
