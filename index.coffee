@@ -25,9 +25,7 @@ pg.connect process.env.DATABASE_URL || 'postgres://florian:florian@localhost/dai
         else if result.rows.length != 1
           next "no such quest", null
         else
-          next null,
-            quest:
-              result.rows[0]
+          next null, result.rows[0]
     index: (req, res) ->
       client.query 'select id, name from quest', (err, pgres) ->
         res.send pgres.rows
