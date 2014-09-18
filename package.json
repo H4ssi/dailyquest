@@ -7,9 +7,9 @@
     "start": "node_modules/coffee-script/bin/coffee index.coffee"
   },
   "dependencies": {
-    "body-parser": "~1.6.x",
+    "body-parser": "~1.x",
     "coffee-script": "~1.8.x",
-    "express": "~4.8.x",
+    "express": "~3.x",
     "express-resource": "^1.0.0",
     "grunt": "~0.4.5",
     "grunt-cli": "^0.1.13",
