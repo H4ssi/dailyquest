@@ -13,3 +13,13 @@ create table daily_mark (
 
 create view daily_mark_date as
     select id, quest, date(date) from daily_mark;
+
+-- version 2
+
+alter table quest
+    alter name set not null,
+    alter start_date set not null;
+
+alter table daily_mark
+    alter quest set not null,
+    alter date set not null;
