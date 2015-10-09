@@ -35,9 +35,6 @@
       :coffeescript
         Polymer "dq-app",
           route: ""
-          routeChanged: (o,n) -> 
-            @$.quests.refresh() if n == ""
-            @$.create.refresh()
 
     %core-header-panel
       %core-toolbar
