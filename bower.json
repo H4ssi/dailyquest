@@ -20,9 +20,16 @@
     "tests"
   ],
   "dependencies": {
-    "core-component-page": "Polymer/core-component-page#>=0.3.0 <1.0.0",
-    "paper-elements": "Polymer/paper-elements#~0.4.0",
-    "core-elements": "Polymer/core-elements#~0.4.0",
-    "flatiron-director": "Polymer/flatiron-director#~0.4.0"
+    "polymer": "Polymer/polymer#^1.1.0",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
+    "paper-button": "PolymerElements/paper-button#~1.0.8",
+    "paper-input": "PolymerElements/paper-input#~1.0.15",
+    "iron-elements": "PolymerElements/iron-elements#~1.0.4",
+    "flatiron-director": "PolymerLabs/flatiron-director#~1.0.0",
+    "paper-header-panel": "PolymerElements/paper-header-panel#~1.0.5",
+    "paper-toolbar": "PolymerElements/paper-toolbar#~1.0.4",
+    "paper-item": "PolymerElements/paper-item#~1.0.3",
+    "iron-pages": "PolymerElements/iron-pages#~1.0.3",
+    "paper-styles": "PolymerElements/paper-styles#~1.0.11"
   }
 }

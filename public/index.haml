@@ -1,45 +1,48 @@
 !!! 5
 %html
   %head
-    %link(rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto")
-    %script(src="bower_components/platform/platform.js")
-    %link(rel="import" href="bower_components/core-header-panel/core-header-panel.html")
-    %link(rel="import" href="bower_components/core-toolbar/core-toolbar.html")
+    %meta(charset="utf-8")
+    %meta(name="viewport" content="width=device-width, initial-scale=1.0")
+
+    %script(src="bower_components/webcomponentsjs/webcomponents-lite.js")
+    %link(rel="import" href="bower_components/polymer/polymer.html")
+
+    %link(rel="import" href="bower_components/paper-styles/paper-styles.html")
+    %link(rel="import" href="bower_components/paper-header-panel/paper-header-panel.html")
+    %link(rel="import" href="bower_components/paper-toolbar/paper-toolbar.html")
     %link(rel="import" href="bower_components/flatiron-director/flatiron-director.html")
-    %link(rel="import" href="bower_components/core-pages/core-pages.html")
+    %link(rel="import" href="bower_components/iron-pages/iron-pages.html")
     %link(rel="import" href="polymer_components/quests.html")
-    :css
-      body {
-        font-family: 'Roboto', sans-serif;
-      }
-      core-toolbar {
-        background-color: #795548;
-        color: white;
-      }
-      core-header-panel {
-        height: 400px;
-      }
-      .content {
-        margin-top: 8px;
-        margin-left: 16px;
-      }
-  %body(fullbleed unresolved)
-    %polymer-element(name="dq-app")
+
+    %style(is="custom-style")
+      :plain
+        * {
+          --default-primary-color: #795548;
+        }
+        body {
+          @apply(--paper-font-common-base);
+        }
+  %body(fullbleed layout vertical)
+    %dom-module#dq-app
       %template
-        %flatiron-director(route="{{route}}" autoHash)
-        %core-pages#pages(valueattr="label" selected="{{route}}")
+        %flatiron-director(route="{{route}}" auto-hash)
+        %iron-pages#pages(attr-for-selected="label" selected="{{route}}")
           %div(label="")
             %dq-quests#quests
           %div(label="create")
             %dq-create#create
       :coffeescript
-        Polymer "dq-app",
-          route: ""
+        HTMLImports.whenReady( ->
+          Polymer(
+            is: "dq-app"
+            route: ""
+          )
+        )
 
-    %core-header-panel
-      %core-toolbar
-        %span(flex) dailyQuest
-      %div.content
+    %paper-header-panel.fit
+      %paper-toolbar
+        %div.title dailyQuest
+      %div
         %dq-app
 
     %script(src="index.js")

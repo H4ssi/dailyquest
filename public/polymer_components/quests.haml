@@ -1,36 +1,48 @@
 !!! 5
 
 %link(rel="import" href="../bower_components/polymer/polymer.html")
-%link(rel="import" href="../bower_components/core-ajax/core-ajax.html")
-%link(rel="import" href="../bower_components/core-item/core-item.html")
+
+%link(rel="import" href="../bower_components/iron-ajax/iron-ajax.html")
+%link(rel="import" href="../bower_components/paper-item/paper-item.html")
 %link(rel="import" href="../bower_components/paper-button/paper-button.html")
 %link(rel="import" href="../bower_components/paper-input/paper-input.html")
 -#%link(rel="import" href="../bower_components/paper-toast/paper-toast.html")
 
-%polymer-element(name="quest-item" attributes="quest" noscript)
+%dom-module#quest-item
   %template
-    %core-item(label="{{quest.name}}")
-
-%polymer-element(name="dq-quests")
-  %template
-    %core-ajax#x(auto url="../quest" handleAs="json")
-    %template(repeat="{{quest in $.x.response}}")
-      %quest-item(quest="{{quest}}")
-    %paper-button(label="Add Quest" raisedButton on-click="{{addQuest}}")
+    %paper-item {{quest.name}}
   :coffeescript
-    Polymer 'dq-quests',
-      addQuest: -> location.hash = "create"
+    Polymer(
+      is: 'quest-item'
+      properties:
+        quest: Object
+    )
 
-%polymer-element(name="dq-create")
+%dom-module#dq-quests
   %template
-    %core-ajax#x(url="../quest" method="POST" contentType="application/json" handleAs="json" on-core-complete="{{redirect}}")
+    %iron-ajax(auto url="../quest" handle-as="json" last-response="{{_quests}}")
+    %template(is="dom-repeat" items="[[_quests]]")
+      %quest-item(quest="[[item]]")
+    %paper-button(raised on-click="addQuest") Add Quest
+  :coffeescript
+    Polymer(
+      is: 'dq-quests'
+      properties:
+        _quests: Array
+      addQuest: -> location.hash = "create"
+    )
+
+%dom-module#dq-create
+  %template
+    %iron-ajax#x(url="../quest" method="POST" content-type="application/json" handle-as="json" on-response="redirect")
     %paper-input#name(label="Quest Title" value="{{name}}")
-    %paper-button(label="Create" raisedButton on-click="{{createQuest}}")
+    %paper-button(raised on-click="createQuest") Create
     -#%paper-toast#toast(text="Quest created.")
   :coffeescript
-    Polymer 'dq-create',
-      createQuest: -> 
-        q = {name: @$.name.value}
-        @$.x.body = JSON.stringify(q)
-        @$.x.go()
+    Polymer(
+      is: 'dq-create'
+      createQuest: ->
+        @$.x.body = {name: @$.name.value}
+        @$.x.generateRequest()
       redirect: -> location.hash = ""
+    )
