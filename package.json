@@ -8,17 +8,16 @@
   },
   "dependencies": {
     "body-parser": "~1.x",
-    "coffee-script": "~1.8.x",
+    "coffee-script": "~1.10.x",
     "express": "~3.x",
     "express-resource": "^1.0.0",
     "grunt": "~0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-coffee": "^0.11.1",
+    "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-env": "^0.4.1",
-    "grunt-express-server": "^0.4.19",
+    "grunt-express-server": "^0.5.1",
     "grunt-haml": "^0.9.0",
-    "pg": "~3.4.x"
+    "pg": "~4.4.x"
   },
   "engines": {
     "node": "0.10.x"
