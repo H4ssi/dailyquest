@@ -1,44 +1,36 @@
 !!! 5
 
 %link(rel="import" href="../bower_components/polymer/polymer.html")
-%link(rel="import" href="../bower_components/record-set/record-set.html")
+%link(rel="import" href="../bower_components/core-ajax/core-ajax.html")
 %link(rel="import" href="../bower_components/core-item/core-item.html")
 %link(rel="import" href="../bower_components/paper-button/paper-button.html")
 %link(rel="import" href="../bower_components/paper-input/paper-input.html")
 -#%link(rel="import" href="../bower_components/paper-toast/paper-toast.html")
 
-%record-set(href="")
-
-%polymer-element(name="quest-record" type="quest" extends="record-base" attributes="name" noscript)
-
-%polymer-element(name="quest-item" extends="quest-record" noscript)
+%polymer-element(name="quest-item" attributes="quest" noscript)
   %template
-    %core-item(label="{{name}}")
+    %core-item(label="{{quest.name}}")
 
 %polymer-element(name="dq-quests")
   %template
-    %quest-record#x
-    %template(repeat="{{quest in $.x.all}}")
-      %quest-item(rid="{{quest}}")
+    %core-ajax#x(auto url="../quest" handleAs="json")
+    %template(repeat="{{quest in $.x.response}}")
+      %quest-item(quest="{{quest}}")
     %paper-button(label="Add Quest" raisedButton on-click="{{addQuest}}")
   :coffeescript
     Polymer 'dq-quests',
-      ready: -> @refresh()
       addQuest: -> location.hash = "create"
-      refresh: -> @$.x.pull()
 
-%polymer-element(name="dq-create" extends="quest-record")
+%polymer-element(name="dq-create")
   %template
+    %core-ajax#x(url="../quest" method="POST" contentType="application/json" handleAs="json" on-core-complete="{{redirect}}")
     %paper-input#name(label="Quest Title" value="{{name}}")
     %paper-button(label="Create" raisedButton on-click="{{createQuest}}")
     -#%paper-toast#toast(text="Quest created.")
   :coffeescript
     Polymer 'dq-create',
       createQuest: -> 
-        #@$.toast.show()
-        @createRemote()
-        @redirect()
+        q = {name: @$.name.value}
+        @$.x.body = JSON.stringify(q)
+        @$.x.go()
       redirect: -> location.hash = ""
-      refresh: -> 
-        @rid = undefined
-        @name = ""
