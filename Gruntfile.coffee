@@ -7,6 +7,13 @@ module.exports = (grunt) ->
                     PATH:
                         value: 'grunt_bin'
                         delimiter: ':'
+        copy:
+            falcor:
+                cwd: 'node_modules/falcor/dist/'
+                src: '**'
+                dest: 'public/falcor/'
+                expand: true
+
         coffee:
             clientScripts:
                 files: [{
@@ -36,11 +43,12 @@ module.exports = (grunt) ->
     }
 
     grunt.loadNpmTasks 'grunt-env'
+    grunt.loadNpmTasks 'grunt-contrib-copy'
     grunt.loadNpmTasks 'grunt-express-server'
     grunt.loadNpmTasks 'grunt-contrib-coffee'
     grunt.loadNpmTasks 'grunt-haml'
     grunt.loadNpmTasks 'grunt-contrib-watch'
 
-    grunt.registerTask 'default', ['env:localBinPath', 'coffee', 'haml']
+    grunt.registerTask 'default', ['env:localBinPath', 'copy:falcor', 'coffee', 'haml']
     grunt.registerTask 'heroku',  ['default', 'express:heroku']
     grunt.registerTask 'dev',     ['default', 'watch']

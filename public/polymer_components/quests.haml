@@ -20,7 +20,7 @@
 
 %dom-module#dq-quests
   %template
-    %iron-ajax(auto url="../quest" handle-as="json" last-response="{{_quests}}")
+    -# %iron-ajax(auto url="../quest" handle-as="json" last-response="{{_quests}}")
     %template(is="dom-repeat" items="[[_quests]]")
       %quest-item(quest="[[item]]")
     %paper-button(raised on-click="addQuest") Add Quest
@@ -28,21 +28,35 @@
     Polymer(
       is: 'dq-quests'
       properties:
-        _quests: Array
+        _questMap: Object
+        _quests:
+          type: Array
+          computed: '_computeQuests(_questMaps)'
+        model:
+          type: Object
+          observer: '_modelSet'
+      _computeQuests: (q) -> Object.keys(q).sort().map((k) -> q[k])
+      _modelSet: ->
+        @model.get('quest[0..100].name').subscribe((q) => @_questMaps = q.json.quest)
       addQuest: -> location.hash = "create"
     )
 
 %dom-module#dq-create
   %template
-    %iron-ajax#x(url="../quest" method="POST" content-type="application/json" handle-as="json" on-response="redirect")
+    -# %iron-ajax#x(url="../quest" method="POST" content-type="application/json" handle-as="json" on-response="redirect")
     %paper-input#name(label="Quest Title" value="{{name}}")
     %paper-button(raised on-click="createQuest") Create
     -#%paper-toast#toast(text="Quest created.")
   :coffeescript
     Polymer(
       is: 'dq-create'
+      properties:
+        model: Object
       createQuest: ->
-        @$.x.body = {name: @$.name.value}
-        @$.x.generateRequest()
-      redirect: -> location.hash = ""
+        #@$.x.body = {name: @$.name.value}
+        #@$.x.generateRequest()
+        #-todo
+        #-@model.call(['add'], [@$.name.value], ['done']).then(=> @redirect())
+      redirect: ->
+        location.hash = ""
     )

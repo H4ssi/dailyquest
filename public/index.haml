@@ -5,6 +5,7 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
 
     %script(src="bower_components/webcomponentsjs/webcomponents-lite.js")
+    %script(src="falcor/falcor.browser.js")
     %link(rel="import" href="bower_components/polymer/polymer.html")
 
     %link(rel="import" href="bower_components/paper-styles/paper-styles.html")
@@ -28,14 +29,22 @@
         %flatiron-director(route="{{route}}" auto-hash)
         %iron-pages#pages(attr-for-selected="label" selected="{{route}}")
           %div(label="")
-            %dq-quests#quests
+            %dq-quests#quests(model="[[model]]")
           %div(label="create")
-            %dq-create#create
+            %dq-create#create(model="[[model]]")
       :coffeescript
         HTMLImports.whenReady( ->
           Polymer(
             is: "dq-app"
             route: ""
+            properties:
+              model:
+                type: Object
+                value: ->
+                  new falcor.Model({
+                    cache:
+                      quest: [{name: 'Task 1'}, {name: 'Task 2'}]
+                  })
           )
         )
 
