@@ -21,23 +21,21 @@
 %dom-module#dq-quests
   %template
     -# %iron-ajax(auto url="../quest" handle-as="json" last-response="{{_quests}}")
-    %template(is="dom-repeat" items="[[_quests]]")
+    %template(is="dom-repeat" items="[[quests]]")
       %quest-item(quest="[[item]]")
     %paper-button(raised on-click="addQuest") Add Quest
   :coffeescript
     Polymer(
       is: 'dq-quests'
       properties:
-        _questMap: Object
-        _quests:
+        quests:
           type: Array
-          computed: '_computeQuests(_questMaps)'
+          readOnly: true
         model:
           type: Object
           observer: '_modelSet'
-      _computeQuests: (q) -> Object.keys(q).sort().map((k) -> q[k])
       _modelSet: ->
-        @model.get('quest[0..100].name').subscribe((q) => @_questMaps = q.json.quest)
+        @model.get('quest[0..100].name').subscribe((q) => @_setQuests( Object.keys(q.json.quest).sort().map((k) -> q.json.quest[k])))
       addQuest: -> location.hash = "create"
     )
 
