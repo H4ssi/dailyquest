@@ -42,8 +42,7 @@
                 type: Object
                 value: ->
                   new falcor.Model({
-                    cache:
-                      quest: [{name: 'Task 1'}, {name: 'Task 2'}]
+                    source: new falcor.HttpDataSource('dailyquest.json')
                   })
           )
         )
