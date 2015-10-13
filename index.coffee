@@ -1,4 +1,5 @@
 falcorExpress = require 'falcor-express'
+bodyParser = require 'body-parser'
 Router = require 'falcor-router'
 express = require 'express'
 pg = require 'pg'
@@ -10,6 +11,9 @@ pg.connect process.env.DATABASE_URL || 'postgres://dailyquest:dailyquest@localho
 
   app = express()
   app.set 'port', process.env.PORT || 3000
+
+  app.use bodyParser.text({type: 'text/*'})
+  app.use bodyParser.urlencoded({type: 'application/x-www-form-urlencoded', extended: true})
   app.use (express.static __dirname + '/public')
   app.use '/bower_components', (express.static __dirname + '/bower_components')
 
@@ -21,6 +25,11 @@ pg.connect process.env.DATABASE_URL || 'postgres://dailyquest:dailyquest@localho
                   get: (pathSet) -> [
                       {path: ['quest', 1, 'name'], value: 'Task 1'}
                       {path: ['quest', 2, 'name'], value: 'Task 2'}]
+              }
+              {
+                route: 'add'
+                call: (callPath, args) -> [
+                    {path: ['quest', 3, 'name'], value: 'Task 3 (new)'}]
               }]))
 
 

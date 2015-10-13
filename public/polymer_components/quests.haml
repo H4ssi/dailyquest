@@ -54,7 +54,7 @@
         #@$.x.body = {name: @$.name.value}
         #@$.x.generateRequest()
         #-todo
-        #-@model.call(['add'], [@$.name.value], ['done']).then(=> @redirect())
+        @model.call('add', [@$.name.value]).then(=> @redirect())
       redirect: ->
         location.hash = ""
     )
