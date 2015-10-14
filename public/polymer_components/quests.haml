@@ -35,7 +35,7 @@
           type: Object
           observer: '_modelSet'
       _modelSet: ->
-        @model.get('quest[0..100].name').subscribe((q) => @_setQuests( Object.keys(q.json.quest).sort().map((k) -> q.json.quest[k])))
+        @model.get('quest[0..100].name').then((q) => @_setQuests( Object.keys(q.json.quest).sort().map((k) -> q.json.quest[k])))
       addQuest: -> location.hash = "create"
     )
 
@@ -51,9 +51,6 @@
       properties:
         model: Object
       createQuest: ->
-        #@$.x.body = {name: @$.name.value}
-        #@$.x.generateRequest()
-        #-todo
         @model.call('add', [@$.name.value]).then(=> @redirect())
       redirect: ->
         location.hash = ""

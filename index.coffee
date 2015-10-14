@@ -3,7 +3,7 @@ bodyParser = require 'body-parser'
 Router = require 'falcor-router'
 express = require 'express'
 pg = require 'pg'
-
+rx = require 'rx'
 
 pg.connect process.env.DATABASE_URL || 'postgres://dailyquest:dailyquest@localhost/dailyquest', (err, client, done) ->
   if err
@@ -18,35 +18,27 @@ pg.connect process.env.DATABASE_URL || 'postgres://dailyquest:dailyquest@localho
   app.use '/bower_components', (express.static __dirname + '/bower_components')
 
   app.use '/dailyquest.json', falcorExpress.dataSourceRoute(
-      (req, res) ->
-          new Router([
-              {
-                  route: 'quest[{ranges:ids}].name'
-                  get: (pathSet) -> [
-                      {path: ['quest', 1, 'name'], value: 'Task 1'}
-                      {path: ['quest', 2, 'name'], value: 'Task 2'}]
-              }
-              {
-                route: 'add'
-                call: (callPath, args) -> [
-                    {path: ['quest', 3, 'name'], value: 'Task 3 (new)'}]
-              }]))
+    (req, res) ->
+      new Router([
+        {
+          route: 'quest[{ranges:ids}].name'
+          get: (pathSet) -> all().map((r) -> {path: ['quest', r.id, 'name'], value: r.name})
+        }
+        {
+          route: 'add'
+          call: (callPath, args) ->
+            [name] = args
+            add(name).map((r) -> {path: ['quest', r.id, 'name'], value: r.name})
+        }]))
 
+  pgrx = (query) ->
+    rx.Observable.create((o) ->
+      query.on('row', (r) -> o.onNext(r))
+      query.on('end', () -> o.onCompleted()))
 
-  byId = (id, next) ->
-      client.query 'select id, name from quest where id = $1', [id], (err, result) ->
-        if err
-          next err, null
-        else if result.rows.length != 1
-          next "no such quest", null
-        else
-          next null, result.rows[0]
-  all = (req, res) ->
-      client.query 'select id, name from quest', (err, pgres) ->
-        res.send pgres.rows
-  add = (req, res) ->
-      client.query 'insert into quest (name, start_date) values ($1,localtimestamp) returning id, name', [req.body.name], (err, pgres) ->
-        res.send pgres.rows[0]
+  byId = (id) -> pgrx(client.query('select id, name from quest where id = $1', [id]))
+  all = () -> pgrx(client.query('select id, name from quest'))
+  add = (name) -> pgrx(client.query('insert into quest (name, start_date) values ($1,localtimestamp) returning id, name', [name]))
 
   mark = (req, res) ->
       client.query 'select id, date from daily_mark where quest = $1 order by date', [req.quest.id], (err, pgres) ->
